@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  title       String
+  goalAmount  Int
+  startDate   DateTime
+  endDate     DateTime
+  platform    String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  backers     Backer[]
+  rewards     Reward[]
+  dailyStats  DailyStats[]
+
+  @@index([platform])
+  @@index([startDate])
+}
+
+model Backer {
+  id         String   @id @default(cuid())
+  amount     Int
+  backedAt   DateTime
+  rewardId   String
+  rewardName String
+  campaignId String
+  createdAt  DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  reward   Reward   @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([rewardId])
+  @@index([backedAt])
+}
+
+model Reward {
+  id          String   @id @default(cuid())
+  name        String
+  price       Int
+  description String?
+  backerCount Int      @default(0)
+  campaignId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  backers  Backer[]
+
+  @@index([campaignId])
+}
+
+model DailyStats {
+  id                 String   @id @default(cuid())
+  date               DateTime @db.Date
+  backers            Int
+  totalAmount        Int
+  cumulativeAmount   Int
+  cumulativeBackers  Int
+  campaignId         String
+  createdAt          DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, date])
+  @@index([campaignId])
+  @@index([date])
+}

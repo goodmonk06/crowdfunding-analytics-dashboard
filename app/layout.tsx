@@ -17,6 +17,7 @@ export default function RootLayout({
         <nav className="bg-gray-800 text-white p-4">
           <div className="container mx-auto flex gap-6">
             <a href="/" className="hover:text-gray-300">ホーム</a>
+            <a href="/campaigns" className="hover:text-gray-300">キャンペーン管理</a>
             <a href="/dashboard" className="hover:text-gray-300">ダッシュボード</a>
             <a href="/cohorts" className="hover:text-gray-300">コホート分析</a>
           </div>
