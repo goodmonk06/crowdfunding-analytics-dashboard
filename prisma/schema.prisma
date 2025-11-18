@@ -10,40 +10,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+  FAILED
+}
+
 model Campaign {
-  id          String   @id @default(cuid())
+  id          String         @id @default(cuid())
   title       String
+  slug        String         @unique
   goalAmount  Int
   startDate   DateTime
   endDate     DateTime
   platform    String
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      CampaignStatus @default(DRAFT)
+  imageUrl    String?
+  videoUrl    String?
+  metadata    Json?          // Flexible storage for platform-specific data
+  templateId  String?
+  categoryId  String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
-  backers     Backer[]
-  rewards     Reward[]
-  dailyStats  DailyStats[]
+  template            CampaignTemplate?         @relation(fields: [templateId], references: [id])
+  category            CampaignCategory?         @relation(fields: [categoryId], references: [id])
+  backers             Backer[]
+  rewards             Reward[]
+  dailyStats          DailyStats[]
+  milestones          CampaignMilestone[]
+  updates             CampaignUpdate[]
+  analyticsSnapshots  CampaignAnalyticsSnapshot[]
+  tags                CampaignTag[]
 
   @@index([platform])
   @@index([startDate])
+  @@index([status])
+  @@index([categoryId])
+  @@index([templateId])
 }
 
 model Backer {
-  id         String   @id @default(cuid())
-  amount     Int
-  backedAt   DateTime
-  rewardId   String
-  rewardName String
-  campaignId String
-  createdAt  DateTime @default(now())
+  id             String   @id @default(cuid())
+  amount         Int
+  backedAt       DateTime
+  rewardId       String
+  rewardName     String
+  campaignId     String
+  backerEmail    String?
+  backerName     String?
+  backerProfileId String?
+  isAnonymous    Boolean  @default(false)
+  comment        String?  // Backer's comment/message
+  createdAt      DateTime @default(now())
 
-  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  reward   Reward   @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+  campaign      Campaign       @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  reward        Reward         @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+  backerProfile BackerProfile? @relation(fields: [backerProfileId], references: [id])
 
   @@index([campaignId])
   @@index([rewardId])
   @@index([backedAt])
+  @@index([backerProfileId])
+  @@index([backerEmail])
 }
 
 model Reward {
@@ -77,4 +110,182 @@ model DailyStats {
   @@unique([campaignId, date])
   @@index([campaignId])
   @@index([date])
+}
+
+// ==================== NEW PHASE 3 MODELS ====================
+
+model CampaignTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String?
+  template    Json     // Template configuration
+  isPublic    Boolean  @default(true)
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaigns Campaign[]
+
+  @@index([category])
+  @@index([isPublic])
+}
+
+model CampaignCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  parentId    String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  parent   CampaignCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children CampaignCategory[] @relation("CategoryHierarchy")
+  campaigns Campaign[]
+
+  @@index([parentId])
+  @@index([slug])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  color     String?
+  createdAt DateTime @default(now())
+
+  campaigns CampaignTag[]
+
+  @@index([slug])
+}
+
+model CampaignTag {
+  id         String   @id @default(cuid())
+  campaignId String
+  tagId      String
+  createdAt  DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, tagId])
+  @@index([campaignId])
+  @@index([tagId])
+}
+
+enum BackerTier {
+  FIRST_TIME
+  REPEAT
+  VIP
+  WHALE
+}
+
+model BackerProfile {
+  id              String     @id @default(cuid())
+  email           String     @unique
+  name            String?
+  avatarUrl       String?
+  totalBacked     Int        @default(0) // Total amount backed across all campaigns
+  campaignCount   Int        @default(0) // Number of campaigns backed
+  tier            BackerTier @default(FIRST_TIME)
+  preferences     Json?      // User preferences and settings
+  location        String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  lastBackedAt    DateTime?
+
+  backers Backer[]
+
+  @@index([email])
+  @@index([tier])
+  @@index([totalBacked])
+}
+
+enum MilestoneType {
+  FUNDING_GOAL
+  STRETCH_GOAL
+  BACKER_COUNT
+  CUSTOM
+}
+
+enum MilestoneStatus {
+  PENDING
+  ACHIEVED
+  FAILED
+}
+
+model CampaignMilestone {
+  id          String          @id @default(cuid())
+  campaignId  String
+  title       String
+  description String?
+  type        MilestoneType
+  targetAmount Int?         // For funding goals
+  targetCount Int?          // For backer count goals
+  currentValue Int          @default(0)
+  status      MilestoneStatus @default(PENDING)
+  achievedAt  DateTime?
+  order       Int            @default(0)
+  isStretch   Boolean        @default(false) // Is this a stretch goal?
+  rewardText  String?        // What backers get when this is achieved
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([status])
+  @@index([type])
+}
+
+enum UpdateVisibility {
+  PUBLIC
+  BACKERS_ONLY
+  PRIVATE
+}
+
+model CampaignUpdate {
+  id          String           @id @default(cuid())
+  campaignId  String
+  title       String
+  content     String           @db.Text
+  visibility  UpdateVisibility @default(PUBLIC)
+  publishedAt DateTime?
+  isDraft     Boolean          @default(true)
+  viewCount   Int              @default(0)
+  likeCount   Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([publishedAt])
+  @@index([visibility])
+}
+
+model CampaignAnalyticsSnapshot {
+  id                  String   @id @default(cuid())
+  campaignId          String
+  snapshotAt          DateTime
+  totalBackers        Int
+  totalAmount         Int
+  averageAmount       Float
+  goalProgress        Float
+  backersGrowthRate   Float?   // % growth from previous snapshot
+  amountGrowthRate    Float?   // % growth from previous snapshot
+  topRewardId         String?
+  topRewardBackers    Int?
+  conversionRate      Float?   // Visitors to backers ratio
+  analyticsData       Json?    // Additional metrics
+  createdAt           DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([snapshotAt])
 }
