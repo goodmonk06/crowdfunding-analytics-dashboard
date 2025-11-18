@@ -1,0 +1,78 @@
+{
+  "id": "campaign-001",
+  "title": "革新的なスマートウォッチ開発プロジェクト",
+  "goalAmount": 5000000,
+  "startDate": "2025-10-01",
+  "endDate": "2025-12-31",
+  "platform": "Makuake",
+  "rewards": [
+    {
+      "id": "reward-001",
+      "name": "早割 30% OFF",
+      "price": 14000,
+      "description": "先着100名様限定の早割価格",
+      "backerCount": 100
+    },
+    {
+      "id": "reward-002",
+      "name": "通常価格",
+      "price": 20000,
+      "description": "通常価格でのご支援",
+      "backerCount": 150
+    },
+    {
+      "id": "reward-003",
+      "name": "プレミアムセット",
+      "price": 35000,
+      "description": "本体+専用バンド3本セット",
+      "backerCount": 50
+    },
+    {
+      "id": "reward-004",
+      "name": "応援プラン",
+      "price": 5000,
+      "description": "リターン不要の応援プラン",
+      "backerCount": 30
+    }
+  ],
+  "backers": [
+    {"id": "b001", "amount": 14000, "backedAt": "2025-10-01T10:00:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b002", "amount": 14000, "backedAt": "2025-10-01T11:30:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b003", "amount": 20000, "backedAt": "2025-10-01T14:20:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b004", "amount": 14000, "backedAt": "2025-10-02T09:15:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b005", "amount": 35000, "backedAt": "2025-10-02T16:45:00Z", "rewardId": "reward-003", "rewardName": "プレミアムセット"},
+    {"id": "b006", "amount": 20000, "backedAt": "2025-10-03T08:30:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b007", "amount": 14000, "backedAt": "2025-10-03T12:00:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b008", "amount": 5000, "backedAt": "2025-10-03T15:20:00Z", "rewardId": "reward-004", "rewardName": "応援プラン"},
+    {"id": "b009", "amount": 14000, "backedAt": "2025-10-04T10:10:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b010", "amount": 20000, "backedAt": "2025-10-04T13:45:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b011", "amount": 35000, "backedAt": "2025-10-05T11:00:00Z", "rewardId": "reward-003", "rewardName": "プレミアムセット"},
+    {"id": "b012", "amount": 14000, "backedAt": "2025-10-05T14:30:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b013", "amount": 20000, "backedAt": "2025-10-06T09:00:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b014", "amount": 14000, "backedAt": "2025-10-06T12:20:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b015", "amount": 5000, "backedAt": "2025-10-06T16:00:00Z", "rewardId": "reward-004", "rewardName": "応援プラン"},
+    {"id": "b016", "amount": 20000, "backedAt": "2025-10-07T10:30:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b017", "amount": 14000, "backedAt": "2025-10-07T14:15:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b018", "amount": 35000, "backedAt": "2025-10-08T11:45:00Z", "rewardId": "reward-003", "rewardName": "プレミアムセット"},
+    {"id": "b019", "amount": 20000, "backedAt": "2025-10-08T15:30:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b020", "amount": 14000, "backedAt": "2025-10-09T09:20:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b021", "amount": 20000, "backedAt": "2025-10-09T13:00:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b022", "amount": 5000, "backedAt": "2025-10-10T10:00:00Z", "rewardId": "reward-004", "rewardName": "応援プラン"},
+    {"id": "b023", "amount": 14000, "backedAt": "2025-10-10T14:30:00Z", "rewardId": "reward-001", "rewardName": "早割 30% OFF"},
+    {"id": "b024", "amount": 20000, "backedAt": "2025-10-11T11:15:00Z", "rewardId": "reward-002", "rewardName": "通常価格"},
+    {"id": "b025", "amount": 35000, "backedAt": "2025-10-11T15:00:00Z", "rewardId": "reward-003", "rewardName": "プレミアムセット"}
+  ],
+  "dailyStats": [
+    {"date": "2025-10-01", "backers": 3, "totalAmount": 48000, "cumulativeAmount": 48000, "cumulativeBackers": 3},
+    {"date": "2025-10-02", "backers": 2, "totalAmount": 49000, "cumulativeAmount": 97000, "cumulativeBackers": 5},
+    {"date": "2025-10-03", "backers": 3, "totalAmount": 39000, "cumulativeAmount": 136000, "cumulativeBackers": 8},
+    {"date": "2025-10-04", "backers": 2, "totalAmount": 34000, "cumulativeAmount": 170000, "cumulativeBackers": 10},
+    {"date": "2025-10-05", "backers": 2, "totalAmount": 49000, "cumulativeAmount": 219000, "cumulativeBackers": 12},
+    {"date": "2025-10-06", "backers": 3, "totalAmount": 39000, "cumulativeAmount": 258000, "cumulativeBackers": 15},
+    {"date": "2025-10-07", "backers": 2, "totalAmount": 34000, "cumulativeAmount": 292000, "cumulativeBackers": 17},
+    {"date": "2025-10-08", "backers": 2, "totalAmount": 55000, "cumulativeAmount": 347000, "cumulativeBackers": 19},
+    {"date": "2025-10-09", "backers": 2, "totalAmount": 34000, "cumulativeAmount": 381000, "cumulativeBackers": 21},
+    {"date": "2025-10-10", "backers": 2, "totalAmount": 19000, "cumulativeAmount": 400000, "cumulativeBackers": 23},
+    {"date": "2025-10-11", "backers": 2, "totalAmount": 55000, "cumulativeAmount": 455000, "cumulativeBackers": 25}
+  ]
+}
